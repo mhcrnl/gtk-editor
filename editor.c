@@ -6,6 +6,7 @@ const char* progname = "First editor";
 const char* authors[] =
 {
 	"Josef Luštický",
+	"Kačer Donald",
 	NULL
 };
 
