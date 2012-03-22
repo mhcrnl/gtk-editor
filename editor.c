@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <gtk/gtk.h>
 
-const char* progname = "1st editor";
+const char* progname = "First editor";
 
 const char* authors[] =
 {
