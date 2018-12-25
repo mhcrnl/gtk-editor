@@ -1,5 +1,15 @@
+/*
+* AUTHOR	: Mihai Cornel mhcrnl@gmail.com	
+* COMPILE	: $ gcc -o editor editor.c `pkg-config --libs --cflags gtk+-2.0`
+* FILE		: editor.c
+* VERSION	: 25.12.2018
+* ADDING 	: icon.png
+* RUNING	: UBUNTU 18.04
+*/
 #include <stdlib.h>
 #include <gtk/gtk.h>
+#include <gdk-pixbuf/gdk-pixbuf.h>
+
 
 const char* progname = "First editor";
 
@@ -11,6 +21,8 @@ const char* authors[] =
 };
 
 const char* license = "GPLv3";
+
+GdkPixbuf* create_pixbuf(const gchar* filename);
 
 
 static void about_show(void)
@@ -24,13 +36,26 @@ static void about_show(void)
 
 int main(int argc, char* argv[])
 {
+	GdkPixbuf *icon = NULL;
+	GtkWidget * vbox = NULL;
+
 	gtk_init(&argc, &argv);
 
 	g_set_prgname(progname);
 
 	GtkAccelGroup * accel_group = gtk_accel_group_new();
+
 	GtkWidget * window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-	GtkWidget * vbox = gtk_vbox_new(FALSE, 0);
+	gtk_window_set_title(GTK_WINDOW(window), "ICON");
+	gtk_window_set_default_size(GTK_WINDOW(window), 230, 150);
+	gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
+
+
+
+	icon = create_pixbuf("user.png");
+	gtk_window_set_icon(GTK_WINDOW(window), icon);
+
+	vbox = gtk_vbox_new(FALSE, 0);
 	GtkWidget * menubar = gtk_menu_bar_new();
 	GtkWidget * file_menu = gtk_menu_new();
 	GtkWidget * help_menu = gtk_menu_new();
@@ -66,7 +91,23 @@ int main(int argc, char* argv[])
 
 	gtk_widget_show_all(window);
 
+	g_object_unref(icon);
+
 	gtk_main();
 
 	return EXIT_SUCCESS;
+}
+
+GdkPixbuf* create_pixbuf(const gchar* filename)
+{
+	GdkPixbuf *pixbuf;
+	GError *error = NULL;
+
+	pixbuf = gdk_pixbuf_new_from_file(filename, &error);
+
+	if(!pixbuf) {
+		fprintf(stderr, "%s\n", error->message);
+		g_error_free(error);
+	}
+	return pixbuf;
 }
